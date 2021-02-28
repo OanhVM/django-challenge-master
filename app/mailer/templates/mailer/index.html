@@ -112,22 +112,15 @@
 		<th>Order Sum</th>
 		<th>Select</th>
 	</tr>
-		{% for company in company_list %}
-		<tr>
-			<td>{{ company.name }}</td>
-			<td>{{ company.order_count }}</td>
-			<td>{{ company.order_sum|floatformat:2 }}</td>
-			<td><input type="checkbox" name="select{{company.pk}}" id=""></td>
-		</tr>
-			{% for contact in company.contacts.all %}
-			<tr>
-				<td>&nbsp;</td>
-				<td>{{ contact.first_name }} {{ contact.last_name }}</td>
-				<td>Orders: {{ contact.get_order_count }}</td>
-				<td></td>
-			</tr>
-			{% endfor %}
-		{% endfor %}
+        {% for company in company_list %}
+            <tr>
+                <td><a href="{% url 'company-detail' company.id %}">{{ company.name }}</a></td>
+                <td>&nbsp;</td>
+                <td>{{ company.order_count }}</td>
+                <td>{{ company.order_sum|floatformat:2 }}</td>
+                <td><input type="checkbox" name="select{{company.id}}" id=""></td>
+            </tr>
+        {% endfor %}
 	</table>
 	</div>
 </body>
