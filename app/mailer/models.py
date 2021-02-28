@@ -10,12 +10,6 @@ class Company(models.Model):
     name = models.CharField(max_length=150)
     bic = models.CharField(max_length=150, blank=True)
 
-    def get_order_count(self):
-        return self.orders.count()
-
-    def get_order_sum(self):
-        return self.orders.aggregate(Sum("total"))["total__sum"]
-
 
 class Contact(models.Model):
     company = models.ForeignKey(
