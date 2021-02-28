@@ -1,7 +1,7 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-
+from django.db.models import Sum
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -11,17 +11,10 @@ class Company(models.Model):
     bic = models.CharField(max_length=150, blank=True)
 
     def get_order_count(self):
-        orders = 0
-        for order in self.orders.all():
-            orders += 1
-        return orders
+        return self.orders.count()
 
     def get_order_sum(self):
-        total_sum = 0
-        for contact in self.contacts.all():
-            for order in contact.orders.all():
-                total_sum += order.total
-        return total_sum
+        return self.orders.aggregate(Sum("total"))["total__sum"]
 
 
 class Contact(models.Model):
@@ -32,10 +25,7 @@ class Contact(models.Model):
     email = models.EmailField()
 
     def get_order_count(self):
-        orders = 0
-        for order in self.orders.all():
-            orders += 1
-        return orders
+        return self.orders.count()
 
 
 @python_2_unicode_compatible
