@@ -33,8 +33,8 @@
 			 $(row).find("td").css("background-color", "yellow");
 		 }
 		 return markrows
- 
- 
+
+
 	 }
 
 			price = $(this).text();
@@ -81,7 +81,7 @@
 					});
 				}
 			}
-			
+
 
 		});
 		});
@@ -108,18 +108,29 @@
 	{% endif %}
 	<tr>
 		<th>Name</th>
+        <th>Contacts</th>
 		<th>Order Count</th>
 		<th>Order Sum</th>
 		<th>Select</th>
 	</tr>
         {% for company in company_list %}
             <tr>
-                <td><a href="{% url 'company-detail' company.id %}">{{ company.name }}</a></td>
+                <td style="color: maroon"><b>{{ company.name }}</b></td>
                 <td>&nbsp;</td>
-                <td>{{ company.order_count }}</td>
-                <td>{{ company.order_sum|floatformat:2 }}</td>
+                <td style="color: maroon"><b>{{ company.order_count }}</b></td>
+                <td style="color: maroon"><b>{{ company.order_sum|floatformat:2 }}</b></td>
                 <td><input type="checkbox" name="select{{company.id}}" id=""></td>
             </tr>
+
+            {% for contact in contacts_per_company|get_item:company.id %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                    <td>{{ contact.order_count }}</td>
+                    <td>{{ contact.order_sum|floatformat:2 }}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
         {% endfor %}
 	</table>
 	</div>
