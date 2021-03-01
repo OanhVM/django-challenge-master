@@ -18,13 +18,18 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
+        companies = context["company_list"]
+        company_ids = [company["id"] for company in companies]
+
         contacts_qs = Contact.objects.prefetch_related("orders") \
             .annotate(order_count=Count("orders")) \
-            .annotate(order_sum=Sum("orders__total"))
+            .annotate(order_sum=Sum("orders__total")) \
+            .filter(company_id__in=company_ids) \
+            .values()
 
         company_dic = {}
-        for company in self.queryset:
-            company_dic[company["id"]] = contacts_qs.filter(company_id=company["id"]).values()
+        for company in companies:
+            company_dic[company["id"]] = [contact for contact in contacts_qs if contact["company_id"] == company["id"]]
 
         context["contacts_per_company"] = company_dic
         return context
